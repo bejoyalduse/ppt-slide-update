@@ -1,0 +1,26 @@
+from pptx import Presentation
+
+# Load the presentation
+prs = Presentation("template.pptx")
+
+# Pick the slide you're interested in (e.g., slide 0 is the first slide)
+slide = prs.slides[0]
+
+# List all shapes and identify which ones are tables
+for idx, shape in enumerate(slide.shapes):
+    if shape.has_table:
+        print(f"Table {idx} found at position (left: {shape.left}, top: {shape.top})")
+
+# Let's say you want to work with the first table
+table_shape = slide.shapes[0]  # assuming it's the first shape and it's a table
+table = table_shape.table
+
+# Access a specific cell, e.g., Row 1, Column 2
+cell = table.cell(1, 2)
+print("Original cell text:", cell.text)
+
+# Change the content of the cell
+cell.text = "Updated Value"
+
+# Save the new presentation
+prs.save("output.pptx")
