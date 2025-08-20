@@ -1,0 +1,32 @@
+from pptx import Presentation
+from pptx.enum.shapes import MSO_SHAPE_TYPE
+
+def list_textbox_and_table_ids_with_text(pptx_file):
+    prs = Presentation(pptx_file)
+
+    for slide_index, slide in enumerate(prs.slides, start=1):
+        print(f"\n--- Slide {slide_index} ---")
+
+        for shape in slide.shapes:
+            shape_id = shape.shape_id
+
+            # Textbox (any shape with text frame)
+            if shape.has_text_frame:
+                text = shape.text.strip()
+                print(f"\nTextbox - ID: {shape_id}")
+                print(f"Text: {text if text else '[Empty]'}")
+
+            # Table
+            elif shape.shape_type == MSO_SHAPE_TYPE.TABLE:
+                print(f"\nTable - ID: {shape_id}")
+                table = shape.table
+                for r_idx, row in enumerate(table.rows):
+                    row_texts = []
+                    for c_idx, cell in enumerate(row.cells):
+                        cell_text = cell.text.strip()
+                        row_texts.append(cell_text if cell_text else "[Empty]")
+                    print(f"  Row {r_idx + 1}: {row_texts}")
+
+# Example usage
+pptx_path = "your_presentation.pptx"  # Replace with your actual file path
+list_textbox_and_table_ids_with_text(pptx_path)
